@@ -9,42 +9,34 @@ class Ball:
         self.up = True
         self.color = (random.randint(100, 255), random.randint(100, 255), random.randint(0, 200))
         self.stop = False
-        self.xspeed = random.randint(1, 3)
-        self.yspeed = random.randint(1, 3)
-        pygame.draw.circle(screen, self.color, self.pos, 50)
+        self.xspeed = random.randint(-7, 7)
+        self.yspeed = random.randint(-7, 7)
+        if self.xspeed == 0 and self.yspeed == 0:
+            self.xspeed, self.yspeed = random.randint(1, 7), random.randint(1, 7)
+        pygame.draw.circle(screen, self.color, self.pos, radius)
 
     def ymove(self):
-        if self.pos[1] >= y_limit - radius:
-            self.up = True
-        if self.pos[1] <= radius:
-            self.up = False
-        if self.up:
-            self.pos = (self.pos[0], self.pos[1] - self.yspeed)
-        else:
-            self.pos = (self.pos[0], self.pos[1] + self.yspeed)
+        if self.pos[1] >= y_limit - radius or self.pos[1] <= radius:
+            self.yspeed = -self.yspeed
+        self.pos = (self.pos[0], self.pos[1] + self.yspeed)
 
     def xmove(self):
-        if self.pos[0] >= 550:
-            self.right = False
-        if self.pos[0] <= 50:
-            self.right = True
-        if self.right:
-            self.pos = (self.pos[0] + self.xspeed, self.pos[1])
-        else:
-            self.pos = (self.pos[0] - self.xspeed, self.pos[1])
+        if self.pos[0] >= x_limit - radius or self.pos[0] <= radius:
+            self.xspeed = -self.xspeed
+        self.pos = (self.pos[0] + self.xspeed, self.pos[1])
 
     def redraw(self):
-        pygame.draw.circle(screen, self.color, self.pos, 50)
+        pygame.draw.circle(screen, self.color, self.pos, radius)
 
 
 pygame.init()
 
 radius = 50
-y_limit = 300
-x_limit = 600
-screen = pygame.display.set_mode((600, 300))
+y_limit = 500
+x_limit = 800
+screen = pygame.display.set_mode((x_limit, y_limit))
 running = True
-FPS = 150
+FPS = 80
 clock = pygame.time.Clock()
 circle_color = (236, 176, 199)
 balls = list()

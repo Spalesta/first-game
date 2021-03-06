@@ -26,15 +26,11 @@ class Ball:
 pygame.init()
 
 screen = pygame.display.set_mode((600, 300))
-x, y = 100, 100
-right = True
 running = True
 FPS = 200
 clock = pygame.time.Clock()
 circle_color = (236, 176, 199)
-screen_color = (112, 146, 190)
-stop = False
-first_ball = Ball((x, y), circle_color)
+balls = list()
 
 while running:
     for event in pygame.event.get():
@@ -42,12 +38,15 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                stop = True
+                pos = event.pos
+                ball = Ball(pos, circle_color)
+                balls.append(ball)
             else:
-                stop = False
-    if not stop:
-        first_ball.hmove()
-    first_ball.redraw()
+                if balls:
+                    del balls[0]
+    for ball in balls:
+        ball.hmove()
+        ball.redraw()
     pygame.display.flip()
     screen.fill((112, 146, 190))
     clock.tick(FPS)

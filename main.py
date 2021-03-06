@@ -1,4 +1,5 @@
 import pygame
+import random
 
 
 class Ball:
@@ -7,17 +8,18 @@ class Ball:
         self.right = True
         self.color = color
         self.stop = False
+        self.speed = random.randint(1, 3)
         pygame.draw.circle(screen, self.color, self.pos, 50)
 
     def hmove(self):
-        if self.pos[0] == 550:
+        if self.pos[0] >= 550:
             self.right = False
-        if self.pos[0] == 50:
+        if self.pos[0] <= 50:
             self.right = True
         if self.right:
-            self.pos = (self.pos[0] + 1, self.pos[1])
+            self.pos = (self.pos[0] + self.speed, self.pos[1])
         else:
-            self.pos = (self.pos[0] - 1, self.pos[1])
+            self.pos = (self.pos[0] - self.speed, self.pos[1])
 
     def redraw(self):
         pygame.draw.circle(screen, self.color, self.pos, 50)
@@ -27,7 +29,7 @@ pygame.init()
 
 screen = pygame.display.set_mode((600, 300))
 running = True
-FPS = 200
+FPS = 150
 clock = pygame.time.Clock()
 circle_color = (236, 176, 199)
 balls = list()

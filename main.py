@@ -3,10 +3,10 @@ import random
 
 
 class Ball:
-    def __init__(self, pos, color):
+    def __init__(self, pos):
         self.pos = pos
         self.right = True
-        self.color = color
+        self.color = (random.randint(100, 255), random.randint(100, 255), random.randint(0, 200))
         self.stop = False
         self.speed = random.randint(1, 3)
         pygame.draw.circle(screen, self.color, self.pos, 50)
@@ -41,7 +41,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 pos = event.pos
-                ball = Ball(pos, circle_color)
+                ball = Ball(pos)
                 balls.append(ball)
             else:
                 if balls:

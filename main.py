@@ -4,6 +4,7 @@ import random
 
 class Ball:
     def __init__(self, pos):
+        self.radius = random.randint(20, 40)
         self.pos = pos
         self.right = True
         self.up = True
@@ -13,20 +14,24 @@ class Ball:
         self.yspeed = random.randint(-7, 7)
         if self.xspeed == 0 and self.yspeed == 0:
             self.xspeed, self.yspeed = random.randint(1, 7), random.randint(1, 7)
-        pygame.draw.circle(screen, self.color, self.pos, radius)
+        pygame.draw.circle(screen, self.color, self.pos, self.radius)
 
     def ymove(self):
-        if self.pos[1] >= y_limit - radius or self.pos[1] <= radius:
+        if self.pos[1] >= y_limit - self.radius or self.pos[1] <= self.radius:
             self.yspeed = -self.yspeed
         self.pos = (self.pos[0], self.pos[1] + self.yspeed)
 
     def xmove(self):
-        if self.pos[0] >= x_limit - radius or self.pos[0] <= radius:
+        if self.pos[0] >= x_limit - self.radius or self.pos[0] <= self.radius:
             self.xspeed = -self.xspeed
         self.pos = (self.pos[0] + self.xspeed, self.pos[1])
 
     def redraw(self):
-        pygame.draw.circle(screen, self.color, self.pos, radius)
+        pygame.draw.circle(screen, self.color, self.pos, self.radius)
+
+    def delete(self, other):
+        if (self.pos[0] - other.pos[0]) ** 2 + (self.pos[1] - other.pos[1]) ** 2 <= (self.radius + other.radius) ** 2:
+            return True
 
 
 pygame.init()
@@ -61,11 +66,23 @@ while running:
             else:
                 if balls:
                     del balls[0]
+    i = 0
+    while i < len(balls):
+        j = i + 1
+        while j < len(balls):
+            if balls[i].delete(balls[j]):
+                balls.pop(j)
+                balls.pop(i)
+                break
+            else:
+                j += 1
+        i += 1
+
     for ball in balls:
         ball.xmove()
         ball.ymove()
         ball.redraw()
     pygame.display.flip()
-    screen.fill((112, 146, 190))
+    screen.fill((180, 222, 250))
     clock.tick(FPS)
 pygame.quit()

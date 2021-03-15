@@ -4,7 +4,7 @@ import random
 
 class Ball:
     def __init__(self, pos):
-        self.radius = random.randint(20, 40)
+        self.radius = random.randint(20, 50)
         self.pos = pos
         self.right = True
         self.up = True
@@ -32,6 +32,7 @@ class Ball:
     def delete(self, other):
         if (self.pos[0] - other.pos[0]) ** 2 + (self.pos[1] - other.pos[1]) ** 2 <= (self.radius + other.radius) ** 2:
             return True
+
 
 
 pygame.init()
@@ -77,6 +78,7 @@ while running:
             else:
                 j += 1
         i += 1
+
 
     for ball in balls:
         ball.xmove()

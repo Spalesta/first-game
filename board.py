@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 import random
+import time
 x, y = 600, 300
 screen = pygame.display.set_mode((x, y))
 screen_color = (0, 0, 0)
@@ -15,8 +16,6 @@ class Board:
         self.cells_width = self.width // self.cell_size  # количество клеток в ширину
 
         self.matrix = [[False] * self.cells_width for _ in range(self.cells_height)]
-        print(self.cells_height, self.cells_width)
-        print(self.matrix)
 
     def redraw(self):
         for i in range(self.cells_height):
@@ -34,20 +33,26 @@ class Board:
 
     def fill_random_cells(self):
         for _ in range(3):
-            y = random.randint(0, len(self.matrix))
-            while all(self.matrix[y]):
-                y = random.randint(0, len(self.matrix))
-            x = random.randint(0, len(self.matrix[0]))
-            while self.matrix[x][y]:
-                x = random.randint(0, len(self.matrix))
-            self.matrix[x][y] = True
+            y = random.randint(0, len(self.matrix) - 1)
+            if all(self.matrix[y]):
+                y = random.randint(0, len(self.matrix) - 1)
+            x = random.randint(0, len(self.matrix[0]) - 1)
+            if self.matrix[y][x]:
+                x = random.randint(0, len(self.matrix[0]) - 1)
+            self.matrix[y][x] = not self.matrix[y][x]
 
 
+board = Board(x - 30, y - 30)
+last_time = time.time()
+start_time = last_time
+time_to_fuck_things_up = 3
 
-board = Board(x, y)
-clock = pygame.time.Clock()
 running = True
 while running:
+    current_time = int(time.time() - last_time)
+    if current_time is time_to_fuck_things_up:
+        board.fill_random_cells()
+        last_time = time.time()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
